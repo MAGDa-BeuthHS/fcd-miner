@@ -1,0 +1,153 @@
+nav{
+  height: 10%;
+  top:0px;
+  left: 0px;
+  right: 0px;
+  position: absolute;
+  background-color: #3399ff;
+  padding: 0px;
+}
+
+#map { 
+  height: 90%; 
+  width: 100%; 
+  position: absolute;
+z-index: 510;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+#help{
+  top: 15%;
+ right: 10px;
+   position: absolute;
+  z-index: 599;
+  background: rgba(0,0,0,.6);
+  width: 260px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  font-family: DejaVu Sans Mono, monospace;
+  
+}
+
+input{
+
+   background: rgba(0,0,0,0);
+}
+
+#start, #alertbtn, #resultbtn{
+  z-index: 510;
+  position: absolute;
+  bottom : 0px;
+  right: 0px;
+  background-color: #3399ff; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-family: DejaVu Sans Mono, monospace;
+
+}
+
+.panel, #complexMenu, #easyMenu{
+  position: absolute;
+  z-index: 599;
+  background: rgba(0,0,0,.6);
+  width: 260px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  font-family: DejaVu Sans Mono, monospace;
+  left: 10px;
+  top:175px;
+
+  display: inline;
+
+
+}
+h3
+{
+  color: #3399ff;
+}
+
+#startmenu, #alert, #result{
+  position: absolute;
+  z-index: 599;
+  background: rgba(0,0,0,.6);
+  width: 500px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+
+  font-family: DejaVu Sans Mono, monospace;
+  left: 35%;
+  top:35%;
+  color: white;
+}
+
+h2{
+  color: white;
+  font-family: DejaVu Sans Mono, monospace;
+  margin-right: 50%;
+}
+
+li{
+  color: white;
+  font-family: DejaVu Sans Mono, monospace;   
+  font-size: 16px; 
+}
+
+ul {
+  right: 0px;
+}
+
+li {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  margin-right: 5%;
+  
+}
+select,  #sortChoice{
+  height: 60%;
+  background-color: #3399ff; 
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-family: DejaVu Sans Mono, monospace;
+}
+
+#count{
+  height: 60px;
+  width: 60px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  font-family: DejaVu Sans Mono, monospace;
+}
+
+#helpbtn{
+  background-color: #3399ff; 
+  height: 60px;
+  border: none;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  font-family: DejaVu Sans Mono, monospace;
+
+}
+
+select{
+   background: rgba(0,0,0,0);
+}

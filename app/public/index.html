@@ -1,0 +1,116 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+ 	<title>Dresden taxi track analysis</title>
+ 	<meta charset="UTF-8"/>
+ 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+ 	<!--Leaflet-->
+ 	<link rel="stylesheet" href="lib/leaflet/leaflet.css"/>
+ 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.dev.js"></script>
+ 	<script src="lib/leaflet/leaflet.js"></script>
+ 	<link rel="stylesheet" href="style.css"/>
+ </head>
+ <body id="body" oncontextmenu="return false;">
+
+ 	<nav>
+ 		<ul>
+ 			<li>	<h2>Dresden Taxi Track Analysis</h2></li>
+ 			
+ 			<li><p>Understandabillity</p></li>
+ 			<li>
+ 				<select id="complexitybtn">
+ 					<option value="Easy">Easy</option>
+ 					<option value="Complex">Complex</option>
+ 					<option value="Agregate">Agregate</option>
+ 				</select> 
+ 			</li>
+ 			<li>
+ 				<button id="helpbtn">Help ?</button>
+ 			</li>
+ 		</ul>
+ 	</nav> 
+ 	<div id="startmenu">
+ 		<div class="innerlay">
+ 			<h3>Welcome to the Dresden Track Analaysis !</h3>
+ 			<p>We used taxi data from Dresden in order to show alternative tracks that people are using from our project : ExCELL.</p>
+ 			<p>You can click on the map to create markers on the map</p>
+ 			<p>Then choose if you want an easy or complex understanding of the tracks</p>
+ 			<p>Change the parameters and click on Find my Way !</p>
+ 			<p>You will get some help on your right !</p>
+ 			<button id="start">Begin</button>
+ 		</div>
+ 	</div>
+
+ 	<div id="easyMenu">
+ 		<h3>Make your Choice</h3>
+ 		<br><div>
+ 			<select id="time">
+ 				<option value="Night">Night</option>
+ 				<option value="Morning">Morning</option>
+ 				<option value="Afternoon">Afternoon</option>
+ 				<option value="Evening">Evening</option>
+ 				<option value="Day">Day</option>
+ 			</select> 
+ 		</div>
+ 		<br>
+ 		<div><button id="query">Find my Way</button>
+ 		</div>
+ 	</div>
+
+ 	<div id="complexMenu" >
+ 		<h3>Make your Choice</h3>
+ 		<div>
+ 			<select id="time">
+ 				<option value="Night">Night</option>
+ 				<option value="Morning">Morning</option>
+ 				<option value="Afternoon">Afternoon</option>
+ 				<option value="Evening">Evening</option>
+ 				<option value="Day">Day</option>
+ 			</select> 
+ 		</div>
+ 		<br>
+ 		<div id="input">
+ 			<input type="number" size="3" value="10" step="5" min="5" max="75" id="count">
+ 		</div>
+ 		<br>
+ 		<button id="complexquery">Find my Way</button>
+ 	</div>
+
+ 	<div id="alert">
+ 		<div class="innerlay">
+ 			<h3>Warning !</h3>
+ 			<p>You can only add 5 points </p>
+ 			<button id="alertbtn">Okay ?</button>
+ 		</div>
+ 	</div>
+
+ 	<div id="result">
+ 		<div class="innerlay">
+ 			<h3>Warning !</h3>
+ 			<p>No result sorry... </p>
+ 			<button id="resultbtn">Okay ?</button>
+ 		</div>
+ 	</div>
+
+
+ 	<div id="help" > 
+ 		<h3 class="text"> Tips </h3>
+ 		<div>
+ 			<span style="color:white;"> First Click</span>
+ 			<img src="marker.png" alt="Click" style="width:55px;height:55px;">
+ 		</div>
+ 		<br>
+ 		<div>
+ 			<span style="color:white;"> Second Click </span>
+ 			<img src="marker3.png" alt="Click" style="width:55px;height:55px;">
+ 		</div>
+ 		<br>
+ 		<div>
+ 			<span style="color:white;"> Right Click </span>
+ 			<img src="no.png" alt="Click" style="width:55px;height:55px;">
+ 		</div>
+ 	</div>
+ 	<div id="map"></div>
+ 	<script src="app.js"></script>
+ </body>
+ </html> 
