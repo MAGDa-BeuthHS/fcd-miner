@@ -4,8 +4,8 @@ var socket = require('socket.io');
 // Setup connection
 
 var username = "postgres" // sandbox username
-var password = "" // read only privileges on our table
-var host = ""
+var password = "postgres" // read only privileges on our table
+var host = "localhost:5433"//"dbl46.beuth-hochschule.de"
 var database = "postgres" // database name
 var conString = "postgres://"+username+":"+password+"@"+host+"/"+database; // Your Database Connection
 

@@ -197,7 +197,11 @@ if(pointCounter<=5){
             console.log(Cx);
             console.log(Cy);
             if(pointCounter>=2){
-                time = timebtn.options[timebtn.selectedIndex].value;
+                if(complexitychoice=="Easy"){
+        time = timebtn.options[timebtn.selectedIndex].value;
+    }else{
+        time = timebtn2.options[timebtn2.selectedIndex].value;
+    }
                 complexitychoice= complexitybtn.options[complexitybtn.selectedIndex].value;
                 carte.style.cursor = "wait";
                 precision=precisionbtn.value;
@@ -238,42 +242,6 @@ if(pointCounter<=5){
         };
 
 
-        
-        var t=function(){
-            if(pointCounter>=2){
-                carte.style.cursor = "wait";
-                precision=precisionbtn.value;
-                loading=Boolean(1);
-                if(tracksLayer){
-        
-                map.removeLayer(tracksLayer);
-    }
-    if(complexitychoice=="Easy"){
-        time = timebtn.options[timebtn.selectedIndex].value;
-    }else{
-        time = timebtn2.options[timebtn2.selectedIndex].value;
-    }
-                
-                socket.emit('query', {
-                    Ax: Ax,
-                    Ay: Ay,
-                    Bx: Bx,
-                    By: By,
-                    Cx: Cx,
-                    Cy: Cy,
-                    Dx: Dx,
-                    Dy: Dy,
-                    Ex: Ex,
-                    Ey: Ey,
-                    time : time,
-                    pointCounter: pointCounter,
-                    precision : precision,
-                    complexity : complexitychoice
-                });
-            }
-        };
-timebtn.onchange =t;
-timebtn2.onchange =t;
 //Link the action with the button from the pop up
 startbtn.addEventListener('click',function(){
     start.style.visibility="hidden";
