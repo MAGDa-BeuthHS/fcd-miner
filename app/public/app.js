@@ -37,6 +37,7 @@ var socket = io.connect('http://localhost:4000');
     var resultbtn = document.getElementById('resultbtn');
     var result = document.getElementById('result');
     var timebtn = document.getElementById("time");
+    var timebtn2 = document.getElementById("time2");
     var carte = document.getElementById("map");
     var precisionbtn = document.getElementById("count");
     var helpmenu = document.getElementById("help");
@@ -237,7 +238,8 @@ if(pointCounter<=5){
         };
 
 
-        timebtn.onchange = function(){
+        
+        var t=function(){
             if(pointCounter>=2){
                 carte.style.cursor = "wait";
                 precision=precisionbtn.value;
@@ -246,7 +248,12 @@ if(pointCounter<=5){
         
                 map.removeLayer(tracksLayer);
     }
-                time = timebtn.options[timebtn.selectedIndex].value;
+    if(complexitychoice=="Easy"){
+        time = timebtn.options[timebtn.selectedIndex].value;
+    }else{
+        time = timebtn2.options[timebtn2.selectedIndex].value;
+    }
+                
                 socket.emit('query', {
                     Ax: Ax,
                     Ay: Ay,
@@ -265,8 +272,8 @@ if(pointCounter<=5){
                 });
             }
         };
-
-
+timebtn.onchange =t;
+timebtn2.onchange =t;
 //Link the action with the button from the pop up
 startbtn.addEventListener('click',function(){
     start.style.visibility="hidden";
