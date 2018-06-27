@@ -225,21 +225,15 @@ WITH RECURSIVE get_lines AS (
 ), start_lines AS (
   SELECT
     tid,
-    trip_count,
-    avg_speed,
-    avg_traveltime,
     geom
   FROM
     get_lines
   WHERE
     _ST_DWithin(ST_GeometryN($1, 1), geom, $2)
-), line_iterator(tid, tids, trip_count, avg_speed, avg_traveltime, line_geom, traversals) AS (
+), line_iterator(tid, tids, line_geom, traversals) AS (
   SELECT
     s1.tid,
     ARRAY[s1.tid] AS tids,
-    s1.trip_count,
-    s1.avg_speed,
-    s1.avg_traveltime,
     ST_MakeLine(ST_GeometryN($1, 1), ST_EndPoint(s1.geom)) AS line_geom,
     1 AS traversals
   FROM
@@ -253,9 +247,6 @@ WITH RECURSIVE get_lines AS (
     SELECT
       i.tid,
       i.tids || l.tid AS tids,
-      l.trip_count,
-      l.avg_speed,
-      l.avg_traveltime,
       l.geom,
       i.traversals + 1 AS traversals
     FROM
@@ -266,23 +257,25 @@ WITH RECURSIVE get_lines AS (
       AND ST_Equals(ST_StartPoint(l.geom), ST_EndPoint(i.line_geom))
 )
 SELECT
-  trip_count,
-  avg_speed,
-  avg_traveltime,
-  geom
+  round(avg(l.trip_count))::int AS trip_count,
+  round(avg(l.avg_speed))::int AS avg_speed,
+  round(sum(l.avg_traveltime)::numeric, 3) AS avg_traveltime,
+  ST_LineMerge(ST_Collect(l.geom ORDER BY t.tid_order)) AS geom
 FROM (
   SELECT
-    round(avg(trip_count))::int AS trip_count,
-    round(avg(avg_speed))::int AS avg_speed,
-    round(sum(avg_traveltime)::numeric, 3) AS avg_traveltime,
-    ST_LineMerge(ST_Collect(line_geom ORDER BY traversals)) AS geom
+    row_number() OVER () AS agg_track_id,
+    tids
   FROM
     line_iterator
-  GROUP BY
-	tid
-) s
+  WHERE	
+    _ST_DWithin(ST_GeometryN($1, ST_NumGeometries($1)), line_geom, $2)
+  ) a,
+  LATERAL unnest(a.tids) WITH ORDINALITY AS t(tid, tid_order),
+  get_lines l
 WHERE
-  _ST_DWithin(ST_GeometryN($1, ST_NumGeometries($1)), geom, $2);
+  l.tid = t.tid
+GROUP BY
+  a.agg_track_id;
 $$
 LANGUAGE sql;
 
