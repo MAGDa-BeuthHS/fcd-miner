@@ -104,7 +104,7 @@ var socket = io.connect('http://localhost:4000');
 
     //Creation of the Map with different attributs, you can add more by look for the Leaflet Doc : Leaflet Related
     var map = L.map('map',{
-        minZoom:14,
+        minZoom:12,
         maxBounds: mybounds,
         maxBoundsViscosity: 1.0,
         panInsideBounds: mybounds
