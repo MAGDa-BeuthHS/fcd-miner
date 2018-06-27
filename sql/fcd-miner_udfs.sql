@@ -262,7 +262,7 @@ WITH RECURSIVE get_lines AS (
       get_lines l,
       line_iterator i
     WHERE
-      l.tid <> ANY (i.tids)
+      l.tid <> ALL (i.tids)
       AND ST_Equals(ST_StartPoint(l.geom), ST_EndPoint(i.line_geom))
 )
 SELECT
