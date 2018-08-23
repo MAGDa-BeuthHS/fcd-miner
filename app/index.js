@@ -5,7 +5,7 @@ var socket = require('socket.io');
 
 var username = "postgres" // sandbox username
 var password = "postgres" // read only privileges on our table
-var host = "localhost:5433"//"dbl46.beuth-hochschule.de"
+var host = "localhost"    // host name
 var database = "postgres" // database name
 var conString = "postgres://"+username+":"+password+"@"+host+"/"+database; // Your Database Connection
 
@@ -94,8 +94,9 @@ io.on('connection', function(socket){
 				break;
 
 			}
+			//console.log("'MULTIPOINT(" + stringPoint + ")'");
 			if(complexity=="Easy"){
-				var filter_query = "SELECT get_trip_geojson(ST_GeomFromText('MULTIPOINT(" + stringPoint + ")', 4326), 0.001, " + timestart + ", " + timeend + ", 5) as results;";
+				var filter_query = "SELECT get_trip_geojson(ST_GeomFromText('MULTIPOINT(" + stringPoint + ")', 4326), 0.001, " + timestart + ", " + timeend + ", 1000) as results;";
 
 			}else if(complexity=="Complex"){
 				var filter_query = "SELECT get_dumped_trip_agg_geojson(ST_GeomFromText('MULTIPOINT(" + stringPoint + ")', 4326), 0.001, " + timestart + ", " + timeend + ", " + precision +") as results;";
