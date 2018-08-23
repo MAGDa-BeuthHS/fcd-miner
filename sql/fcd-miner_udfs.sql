@@ -30,7 +30,7 @@ WITH find_segments AS (
     ON s.trip_id = t.id
   WHERE
     _ST_DWithin(ST_GeometryN($1, 1), t.geom, $2)
-    AND _ST_DWithin(ST_GeometryN($1, 1), t.geom, $2)
+    AND _ST_DWithin(ST_GeometryN($1, ST_NumGeometries($1)), t.geom, $2)
     AND ST_LineLocatePoint(t.geom, ST_GeometryN($1, 1)) < ST_LineLocatePoint(t.geom, ST_GeometryN($1, ST_NumGeometries($1)))
 )
 SELECT
@@ -214,6 +214,7 @@ CREATE OR REPLACE FUNCTION get_trip_agg(
   ) RETURNS SETOF RECORD AS
 $$
 WITH RECURSIVE get_lines AS (
+  -- fetch segments with statistical parameters
   SELECT
     row_number() OVER () AS tid,
     trip_count,
@@ -223,14 +224,19 @@ WITH RECURSIVE get_lines AS (
   FROM
     get_dumped_trip_agg($1, $2, $3, $4, $5)
 ), start_lines AS (
-  SELECT
+  -- find unique segments to start with
+  SELECT DISTINCT ON (ST_Endpoint(geom))
     tid,
     geom
   FROM
     get_lines
   WHERE
     _ST_DWithin(ST_GeometryN($1, 1), geom, $2)
+  ORDER BY
+    ST_Endpoint(geom),
+    ST_Distance(ST_StartPoint(geom), ST_GeometryN($1, 1))
 ), line_iterator(tid, tids, line_geom, traversals) AS (
+  -- only pick segments that do not have a neighbour at their start point
   SELECT
     s1.tid,
     ARRAY[s1.tid] AS tids,
@@ -244,6 +250,7 @@ WITH RECURSIVE get_lines AS (
   WHERE
     s2.tid IS NULL
   UNION ALL
+    -- recursive part: find subsequent segments (cricles are not allowed)
     SELECT
       i.tid,
       i.tids || l.tid AS tids,
@@ -253,7 +260,7 @@ WITH RECURSIVE get_lines AS (
       get_lines l,
       line_iterator i
     WHERE
-      l.tid <> ALL (i.tids)
+      NOT (l.tid = ANY (i.tids))
       AND ST_Equals(ST_StartPoint(l.geom), ST_EndPoint(i.line_geom))
 )
 SELECT
@@ -262,6 +269,8 @@ SELECT
   round(sum(l.avg_traveltime)::numeric, 3) AS avg_traveltime,
   ST_LineMerge(ST_Collect(l.geom ORDER BY t.tid_order)) AS geom
 FROM (
+  -- only pick rows from line iterator that match with the last point of the input geometry
+  -- the tids arrays tell us which lines to aggregate to a whole route
   SELECT
     row_number() OVER () AS agg_track_id,
     tids
