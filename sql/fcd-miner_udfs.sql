@@ -235,12 +235,12 @@ WITH RECURSIVE get_lines AS (
   ORDER BY
     ST_Endpoint(geom),
     ST_Distance(ST_StartPoint(geom), ST_GeometryN($1, 1))
-), line_iterator(tid, tids, line_geom, traversals) AS (
+), line_iterator(tid, tids, hook, traversals) AS (
   -- only pick segments that do not have a neighbour at their start point
   SELECT
     s1.tid,
     ARRAY[s1.tid] AS tids,
-    ST_MakeLine(ST_GeometryN($1, 1), ST_EndPoint(s1.geom)) AS line_geom,
+    ST_EndPoint(s1.geom) AS hook,
     1 AS traversals
   FROM
     start_lines s1
@@ -261,7 +261,7 @@ WITH RECURSIVE get_lines AS (
       line_iterator i
     WHERE
       NOT (l.tid = ANY (i.tids))
-      AND ST_Equals(ST_StartPoint(l.geom), ST_EndPoint(i.line_geom))
+      AND ST_Equals(ST_StartPoint(l.geom), hook)
 )
 SELECT
   round(avg(l.trip_count))::int AS trip_count,
@@ -277,7 +277,7 @@ FROM (
   FROM
     line_iterator
   WHERE	
-    _ST_DWithin(ST_GeometryN($1, ST_NumGeometries($1)), line_geom, $2)
+    _ST_DWithin(ST_GeometryN($1, ST_NumGeometries($1)), hook, $2)
   ) a,
   LATERAL unnest(a.tids) WITH ORDINALITY AS t(tid, tid_order),
   get_lines l
