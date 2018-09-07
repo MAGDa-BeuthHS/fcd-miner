@@ -254,14 +254,14 @@ WITH RECURSIVE get_lines AS (
     SELECT
       i.tid,
       i.tids || l.tid AS tids,
-      l.geom,
+      ST_EndPoint(l.geom) AS hook,
       i.traversals + 1 AS traversals
     FROM
       get_lines l,
       line_iterator i
     WHERE
       NOT (l.tid = ANY (i.tids))
-      AND ST_Equals(ST_StartPoint(l.geom), hook)
+      AND ST_Equals(ST_StartPoint(l.geom), i.hook)
 )
 SELECT
   round(avg(l.trip_count))::int AS trip_count,
