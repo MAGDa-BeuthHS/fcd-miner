@@ -277,7 +277,7 @@ FROM (
   FROM
     line_iterator
   WHERE	
-    _ST_DWithin(ST_GeometryN($1, ST_NumGeometries($1)), hook, $2)
+    _ST_DWithin(ST_GeometryN($1, ST_NumGeometries($1)), hook, $2 / 10)
   ) a,
   LATERAL unnest(a.tids) WITH ORDINALITY AS t(tid, tid_order),
   get_lines l
