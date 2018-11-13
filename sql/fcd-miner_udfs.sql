@@ -40,9 +40,9 @@ FROM
   create_substrings s
 JOIN LATERAL (
   SELECT
-	array_agg(_ST_DWithin((dp).geom, s.geom, $2)) AS intersects
+    array_agg(_ST_DWithin((dp).geom, s.geom, $2)) AS intersects
   FROM
-	ST_DumpPoints($1) dp
+    ST_DumpPoints($1) dp
 ) p ON (true)
 WHERE
   TRUE = ALL (p.intersects)
@@ -66,7 +66,7 @@ FROM (
     'FeatureCollection' AS type,
     COALESCE(array_to_json(array_agg(f)), '[]'::json) AS features
   FROM (
-	SELECT 
+    SELECT 
       'Feature' AS type,
       row_to_json(row(
         q.trip_id,
@@ -83,7 +83,7 @@ FROM (
       SELECT
         avg(ST_Z((dp).geom)) AS avg_speed
       FROM
-	    ST_DumpPoints(q.geom) dp
+        ST_DumpPoints(q.geom) dp
     ) z ON (true)
     WHERE
       extract(hour from to_timestamp(ST_M(ST_StartPoint(q.geom)))) + 1 <= $4
@@ -180,7 +180,7 @@ FROM (
     'FeatureCollection' AS type,
     COALESCE(array_to_json(array_agg(f)),'[]'::json) AS features
   FROM (
-	SELECT
+    SELECT
       'Feature' AS type,
       row_to_json(row(
         row_number() OVER (),
@@ -304,7 +304,7 @@ FROM (
     'FeatureCollection' AS type,
     COALESCE(array_to_json(array_agg(f)),'[]'::json) AS features
   FROM (
-	SELECT
+    SELECT
       'Feature' AS type,
       row_to_json(row(
         row_number() OVER (),
